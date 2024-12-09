@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <stdint.h>
+
+// Mock functions to simulate UART, I2C, and SPI behavior
+void UART_SendString(const char *str) {
+    printf("%s", str); // Simulate sending a string over UART by printing to console
+}
+
+uint8_t I2C_ReadByte(uint8_t device_addr, uint8_t reg_addr) {
+    // Simulate reading a byte from a device (returning a mock temperature value)
+    return 25; // Example: returning a mock temperature of 25°C
+}
+
+void SPI_WriteByte(uint8_t data) {
+    // Simulate writing data via SPI (printing to console)
+    printf("SPI Write: %d\n", data);
+}
+
+void read_temperature_data(void) {
+    uint8_t temp_data = I2C_ReadByte(0x48, 0x00); // Example device address and register
+    char buffer[20];
+    
+    sprintf(buffer, "Temp: %d°C\n", temp_data);   // Format temperature data into string
+    UART_SendString(buffer);                       // Send temperature data over "UART"
+    SPI_WriteByte(temp_data);                      // Log temperature data via "SPI"
+}
+
+int main(void) {
+    while (1) {
+        read_temperature_data(); // Continuously read and process sensor data
+        break; // Break after one iteration for demonstration purposes
+    }
+    
+    return 0;
+}
